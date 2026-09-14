@@ -71,38 +71,3 @@ crag-assistant/
 `graph.py` defaults to `gpt-4o-mini`. To use Groq's free/fast Llama models
 instead, install `langchain-groq`, uncomment the Groq block in `get_llm()`,
 and set `GROQ_API_KEY` in `.env`.
-
-## Why this is a good portfolio project
-
-Plain RAG (chunk a PDF, embed it, do similarity search) is on a lot of
-resumes. What makes this one stand out is the small addition of a **cyclic,
-conditional workflow**: the graph makes a runtime decision about its own
-retrieval quality instead of trusting top-k results unconditionally. That's
-the core idea behind "agentic" RAG systems, and it's a natural jumping-off
-point to talk about state machines, self-correction, and reducing
-hallucination.
-
-### Resume bullets
-
-- Built an agentic RAG pipeline with LangChain and LangGraph implementing
-  Corrective RAG (CRAG), where an LLM grades retrieved-chunk relevance before
-  generation.
-- Added conditional state-machine routing that falls back to the Tavily web
-  search API when retrieval confidence is low, reducing hallucinated answers.
-- Indexed documents with Hugging Face embeddings and ChromaDB, and shipped an
-  interactive Streamlit interface for end users.
-
-### How to talk about it in an interview
-
-- **The problem:** a standard RAG chain is linear — if the vector store
-  returns weak or irrelevant chunks, the model either hallucinates or gives a
-  generic non-answer.
-- **The fix:** replace the linear chain with a LangGraph `StateGraph`. Each
-  node does one job, and a conditional edge decides the next step based on
-  the current state.
-- **The mechanism:** a grading node uses structured LLM output to score
-  chunk relevance. Relevant → generate directly. Not relevant → fall back to
-  a live web search, then generate from that instead.
-- **Why it matters:** the system checks its own work at runtime instead of
-  assuming the top-k nearest neighbors are always good enough — a small step
-  toward production-grade reliability.
