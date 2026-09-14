@@ -1,0 +1,11 @@
+# Secrets — never commit real API keys
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Generated / local data
+chroma_db/
+data/*.pdf
